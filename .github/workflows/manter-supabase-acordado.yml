@@ -1,0 +1,27 @@
+name: Manter Supabase acordado
+
+# O plano grátis do Supabase pausa o projeto depois de alguns dias sem uso.
+# Este ping diário faz uma chamada leve ao banco para ele não dormir.
+
+on:
+  schedule:
+    - cron: "17 9,21 * * *"   # duas vezes por dia (06:17 e 18:17 em Brasília)
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping no Supabase
+        env:
+          SB_URL: https://xanrzaeoapwziancxykj.supabase.co
+          SB_KEY: sb_publishable_czmW7Ij1VQqDeZ_tXUxM4g_xG1Mfj-c
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: $SB_KEY" \
+            "$SB_URL/rest/v1/quotes?select=id&limit=1")
+          echo "Resposta do Supabase: $code"
+          if [ "$code" != "200" ]; then
+            echo "Supabase não respondeu. Pode estar pausado."
+            exit 1
+          fi

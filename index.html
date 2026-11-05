@@ -381,6 +381,7 @@ body.demo .bigprev em::before{content:'exemplo · ';font-weight:400}
   <span class="sync" id="sync"></span>
   <span class="sp"></span>
   <button class="btn hd saldo" id="bSaldo" type="button" hidden></button>
+  <button class="btn hd" id="bAjuda" type="button" aria-haspopup="dialog">? ajuda</button>
   <button class="btn hd conta" id="bConta" type="button">entrar</button>
   <button class="btn hd" id="bPrevTop" type="button">ver prévia</button>
   <button class="btn hd" id="bNovo">+ Novo orçamento</button>
@@ -585,6 +586,25 @@ body.demo .bigprev em::before{content:'exemplo · ';font-weight:400}
   </div>
   <p class="note" id="compTeste" hidden style="margin:12px 0 0;color:#F3D872">Modo de teste: use o cartão 4242 4242 4242 4242, qualquer data futura e qualquer CVC. Nenhum valor é cobrado.</p>
   <p class="note" style="margin:14px 0 0">Pagamento seguro pelo Stripe. Depois de pagar você volta pra cá e os créditos entram sozinhos em alguns segundos.</p>
+</div></div>
+<div class="modal" id="mAjuda" role="dialog" aria-labelledby="ajT"><div class="box wide">
+  <div style="display:flex;align-items:center;margin-bottom:6px"><h3 id="ajT" style="flex:1;margin:0">Precisa de ajuda?</h3><button class="btn ghost" data-close>Fechar</button></div>
+  <p class="note" style="margin:0 0 14px">As dúvidas mais comuns estão aqui. Toque na pergunta pra ver a resposta.</p>
+  <div class="aj-list">
+<details class="aj-q"><summary>Como faço meu primeiro orçamento?</summary><p>Escolha o tipo de orçamento lá em cima (ele já preenche um exemplo), troque pelos seus dados, itens e valores e clique em <b>ver prévia</b> pra conferir a folha do jeito que o cliente vai receber. Pra baixar, imprimir ou mandar o link, crie sua conta grátis.</p></details>
+<details class="aj-q"><summary>Por que aparece "MODELO / AMOSTRA GRÁTIS"?</summary><p>Sem conta você vê só o orçamento de exemplo. Crie a conta grátis no botão <b>entrar</b>: você ganha 3 orçamentos pra testar e a marca d'água sai.</p></details>
+<details class="aj-q"><summary>Não chegou o código de 6 números</summary><p>Confira a caixa de spam e a aba Promoções do e-mail. Veja se o e-mail foi digitado certo. Se depois de alguns minutos não chegar, peça um código novo ou fale comigo no botão abaixo.</p></details>
+<details class="aj-q"><summary>O que é um crédito?</summary><p>Cada crédito emite um orçamento: baixar o PDF, imprimir ou mandar o link de aprovação. Baixar de novo o mesmo orçamento não gasta crédito. Os créditos não vencem.</p></details>
+<details class="aj-q"><summary>Como compro mais créditos?</summary><p>Clique no seu saldo no topo da página e escolha um pacote (10, 30 ou 50 orçamentos, R$ 1,00 cada). O pagamento é pelo Stripe e os créditos entram sozinhos em alguns segundos.</p></details>
+<details class="aj-q"><summary>Como o cliente aprova o orçamento?</summary><p>Gere o link de aprovação e mande pelo WhatsApp ou e-mail. O cliente abre no celular, confere e aprova com nome e CPF, sem precisar criar conta. Você acompanha em <b>meus orçamentos</b>.</p></details>
+<details class="aj-q"><summary>Quero mudar um orçamento que já foi aprovado</summary><p>Orçamento aprovado fica travado pra ninguém alterar depois do aceite. Abra em <b>meus orçamentos</b> e use duplicar pra fazer uma nova versão.</p></details>
+<details class="aj-q"><summary>Como coloco meu logo e minha cor?</summary><p>No quadro <b>Sua empresa</b>, clique em "Enviar logo da empresa". Depois escolha a cor do PDF no retângulo colorido ou use "Usar cor do logo".</p></details>
+<details class="aj-q"><summary>Dá pra receber por Pix?</summary><p>Sim. Coloque sua chave Pix nas formas de pagamento e o PDF já sai com o QR Code com o valor preenchido.</p></details>
+  </div>
+  <div class="aj-contato">
+    <div><b>Não achou a resposta?</b><span>Me manda uma mensagem que eu respondo pessoalmente.</span></div>
+    <a class="btn pri" id="ajMail" href="mailto:jeffersonbuiar@gmail.com?subject=Ajuda%20Crie%20Or%C3%A7amento">Falar comigo</a>
+  </div>
 </div></div>
 <div class="menuconta" id="menuConta" hidden role="menu"></div>
 <div class="toast" id="toast"></div>
@@ -4017,6 +4037,36 @@ $('#cor').addEventListener('input',renderSw);
 /* ---------- init ---------- */
 if(MODO_CLIENTE){iniciarCliente()}else{if(sb&&!temSessao())S=demoState();S.sigEm='';S.sigCl='';fillFields();renderPreview();applyLock();renderSw();aplicarAcesso()}
 window.__buildPDF=buildPDF;
+})();
+</script>
+<style id="ajudaCss">
+#bAjuda{border-color:#3A4420;color:var(--lime,#C6E06A)}
+#bAjuda:hover{border-color:var(--lime,#C6E06A);color:#fff}
+.aj-list{display:flex;flex-direction:column;gap:8px}
+.aj-q{background:#1C1C1C;border:1px solid #2A2A2A;border-radius:12px;padding:0}
+.aj-q summary{cursor:pointer;list-style:none;padding:14px 44px 14px 16px;font-weight:600;font-size:15px;color:#F2F2F2;position:relative}
+.aj-q summary::-webkit-details-marker{display:none}
+.aj-q summary::after{content:"+";position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--lime,#C6E06A);font-size:20px;font-weight:400}
+.aj-q[open] summary::after{content:"\2212"}
+.aj-q[open]{border-color:#3A4420}
+.aj-q p{margin:0;padding:0 16px 16px;color:#B5B5B5;font-size:14px;line-height:1.6}
+.aj-q p b{color:#EDEDED}
+.aj-contato{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;padding:16px;border-radius:12px;background:rgba(198,224,106,.07);border:1px solid #3A4420}
+.aj-contato div{flex:1;min-width:200px;display:flex;flex-direction:column;gap:2px;font-size:14px}
+.aj-contato span{color:#A8A8A8}
+.aj-fab{position:fixed;right:16px;bottom:16px;z-index:35;width:52px;height:52px;border-radius:50%;border:0;background:var(--lime,#C6E06A);color:#111;font-weight:800;font-size:22px;box-shadow:0 6px 20px rgba(0,0,0,.45);cursor:pointer;display:none}
+@media (max-width:700px){.aj-fab{display:block}}
+body.pv-on .aj-fab{display:none}
+</style>
+<button class="aj-fab" id="ajFab" type="button" aria-label="Ajuda">?</button>
+<script>
+(function(){
+  var m=document.getElementById('mAjuda');if(!m)return;
+  function abrir(){m.classList.add('on');}
+  ['bAjuda','ajFab'].forEach(function(id){var b=document.getElementById(id);if(b)b.addEventListener('click',abrir);});
+  m.addEventListener('click',function(e){if(e.target===m||e.target.hasAttribute('data-close'))m.classList.remove('on');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')m.classList.remove('on');});
+  m.querySelectorAll('.aj-q').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)m.querySelectorAll('.aj-q').forEach(function(o){if(o!==d)o.open=false;});});});
 })();
 </script>
 </body>
